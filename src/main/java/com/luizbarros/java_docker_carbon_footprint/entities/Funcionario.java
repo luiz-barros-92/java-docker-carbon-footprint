@@ -1,4 +1,4 @@
-package com.luizbarros.java_docker_carbon_footprint.model;
+package com.luizbarros.java_docker_carbon_footprint.entities;
 
 import java.util.ArrayList;
 import java.util.List;

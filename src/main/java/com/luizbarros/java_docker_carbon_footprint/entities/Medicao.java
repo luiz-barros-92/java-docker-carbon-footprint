@@ -1,7 +1,9 @@
-package com.luizbarros.java_docker_carbon_footprint.model;
+package com.luizbarros.java_docker_carbon_footprint.entities;
 
 import java.time.LocalDate;
 import java.util.Objects;
+
+import com.luizbarros.java_docker_carbon_footprint.entities.enums.TipoFase;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
