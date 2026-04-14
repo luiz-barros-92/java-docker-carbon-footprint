@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Pegada de Carbono ODS 13</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card-impacto { border-left: 5px solid #198754; }
+        .reducao-positiva { color: #198754; font-weight: bold; }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <header class="pb-3 mb-4 border-bottom">
+        <h1 class="display-5 fw-bold text-success">Monitoramento de Carbono</h1>        
+    </header>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm card-impacto">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-muted">Antes da Palestra</h5>
+                    <h2 class="display-6" th:text="${#numbers.formatDecimal(relatorio.totalCo2Pre, 1, 2)} + ' kg'">0.00 kg</h2>
+                    <small>Total CO2e (KM + kWh)</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm card-impacto">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-muted">Após a Palestra</h5>
+                    <h2 class="display-6" th:text="${#numbers.formatDecimal(relatorio.totalCo2Pos, 1, 2)} + ' kg'">0.00 kg</h2>
+                    <small>Total CO2e (KM + kWh)</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm bg-success text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Impacto da Redução</h5>
+                    <h2 class="display-6" th:text="${#numbers.formatDecimal(relatorio.getPercentualReducao(), 1, 1)} + '%'">0%</h2>
+                    <p class="mb-0">Menos emissões na atmosfera</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <h3>Detalhes de Locomoção (KM)</h3>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Total KM Inicial: <span class="badge bg-secondary rounded-pill" th:text="${relatorio.kmTotalPre}">0</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Total KM Atual: <span class="badge bg-success rounded-pill" th:text="${relatorio.kmTotalPos}">0</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3>Consumo Elétrico (kWh)</h3>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Consumo Inicial: <span class="badge bg-secondary rounded-pill" th:text="${relatorio.kwhTotalPre}">0</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Consumo Atual: <span class="badge bg-success rounded-pill" th:text="${relatorio.kwhTotalPos}">0</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Histórico de Coleta</h4>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Data</th>
+                        <th>Funcionário</th>
+                        <th>Fase</th>
+                        <th>KM Rodados</th>
+                        <th>kWh Consumido</th>
+                        <th>Total CO2 (kg)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="medicao : ${medicoes}">
+                        <td th:text="${#temporals.format(medicao.dataLeitura, 'dd/MM/yyyy')}">01/01/2026</td>
+                        <td th:text="${medicao.funcionario.nome}">Nome do Funcionário</td>
+                        <td>
+                            <span class="badge" 
+                                  th:classappend="${medicao.tipo.name() == 'PRE_PALESTRA' ? 'bg-warning text-dark' : 'bg-info text-dark'}"
+                                  th:text="${medicao.tipo.descricao}">Fase</span>
+                        </td>
+                        <td th:text="${medicao.kmRodados}">0</td>
+                        <td th:text="${medicao.kwhConsumido}">0</td>
+                        <td class="fw-bold" th:text="${#numbers.formatDecimal(medicao.totalCo2, 1, 2)}">0.00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
